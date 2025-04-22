@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Trivia Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3e5f5; /* Light pink background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #5e35b1; /* Purple text color */
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            text-align: center;
+            border: 2px solid #e1bee7; /* Light purple border */
+        }
+
+        h1 {
+            color: #9c27b0; /* Pinkish purple */
+        }
+
+        .question {
+            margin: 20px 0;
+            font-size: 20px;
+        }
+
+        .options button {
+            background-color: #9c27b0; /* Pink button */
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .options button:hover {
+            background-color: #7b1fa2; /* Darker pink on hover */
+        }
+
+        .timer {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #7b1fa2; /* Purple timer text */
+        }
+
+        .score {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #5e35b1; /* Purple score text */
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Sports Trivia Game</h1>
+    <div class="timer" id="timer">Time left: 30s</div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="score" id="score"></div>
+</div>
+
+<script>
+    const questions = [
+        {
+            question: "Which NFL team won the most Super Bowls?",
+            options: ["Pittsburgh Steelers", "Dallas Cowboys", "New England Patriots", "San Francisco 49ers"],
+            answer: "New England Patriots"
+        },
+        {
+            question: "Who won the NBA MVP in 2020?",
+            options: ["LeBron James", "Giannis Antetokounmpo", "James Harden", "Kawhi Leonard"],
+            answer: "Giannis Antetokounmpo"
+        },
+        {
+            question: "Which soccer player is known as 'The Egyptian King'?",
+            options: ["Mohamed Salah", "Lionel Messi", "Cristiano Ronaldo", "Neymar"],
+            answer: "Mohamed Salah"
+        },
+        {
+            question: "Which country won the 2018 FIFA World Cup?",
+            options: ["Brazil", "France", "Germany", "Argentina"],
+            answer: "France"
+        },
+        {
+            question: "Who holds the MLB record for most home runs in a single season?",
+            options: ["Babe Ruth", "Barry Bonds", "Hank Aaron", "Alex Rodriguez"],
+            answer: "Barry Bonds"
+        }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let timer = 30;
+    let interval;
+
+    // Start the game
+    function startGame() {
+        loadQuestion();
+        interval = setInterval(updateTimer, 1000);
+    }
+
+    // Load question and options
+    function loadQuestion() {
+        if (currentQuestion < questions.length) {
+            const questionObj = questions[currentQuestion];
+            document.getElementById("question").textContent = questionObj.question;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = '';
+            questionObj.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsDiv.appendChild(button);
+            });
+        } else {
+            endGame();
+        }
+    }
+
+    // Check the answer
+    function checkAnswer(selectedOption) {
+        const correctAnswer = questions[currentQuestion].answer;
+        if (selectedOption === correctAnswer) {
+            score++;
+        }
+        currentQuestion++;
+        loadQuestion();
+    }
+
+    // Update the timer
+    function updateTimer() {
+        timer--;
+        document.getElementById("timer").textContent = `Time left: ${timer}s`;
+
+        if (timer === 0) {
+            clearInterval(interval);
+            endGame();
+        }
+    }
+
+    // End the game
+    function endGame() {
+        document.getElementById("question").textContent = "Game Over!";
+        document.getElementById("options").innerHTML = '';
+        document.getElementById("score").textContent = `Your Score: ${score}`;
+    }
+
+    startGame();
+</script>
+
+</body>
+</html>
